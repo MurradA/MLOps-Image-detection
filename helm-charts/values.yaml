@@ -1,0 +1,25 @@
+replicaCount: 2
+
+image:
+  repository: murradasgheddi123/ml-web-service
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+ingress:
+  enabled: true
+  host: ml-web-service.local
+  path: /
+  pathType: Prefix
+
+resources:
+  limits:
+    memory: "256Mi"
+    cpu: "500m"
+
+env:
+  ENV: "production"

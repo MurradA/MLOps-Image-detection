@@ -1,7 +1,7 @@
 <html>
-<head><title>502 Bad Gateway</title></head>
+<head><title>413 Request Entity Too Large</title></head>
 <body>
-<center><h1>502 Bad Gateway</h1></center>
+<center><h1>413 Request Entity Too Large</h1></center>
 <hr><center>nginx</center>
 </body>
 </html>

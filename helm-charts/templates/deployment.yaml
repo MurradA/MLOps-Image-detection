@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ml-web-service
+  labels:
+    app: {{ .Release.Name }}-ml-web-service
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-ml-web-service
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-ml-web-service
+    spec:
+      containers:
+      - name: ml-web-service
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            memory: {{ .Values.resources.limits.memory }}
+            cpu: {{ .Values.resources.limits.cpu }}
+        env:
+        - name: ENV
+          value: {{ .Values.env.ENV | quote }}
