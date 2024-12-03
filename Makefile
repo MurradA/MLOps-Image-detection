@@ -1,7 +1,7 @@
 # Variables
 CLUSTER_NAME ?= ml-cluster
-HELM_RELEASE_NAME ?= ml-web-service
-DOCKER_IMAGE ?= ml-web-service
+HELM_RELEASE_NAME ?= murrads
+DOCKER_IMAGE ?= ml-web-service-2
 DOCKER_TAG ?= latest
 HOST_PORT ?= 8000
 HTTPS_PORT ?= 9443
@@ -104,18 +104,18 @@ load:
 	@echo "Loading Docker image into Kind cluster..."
 	kind load docker-image $(DOCKER_IMAGE):$(DOCKER_TAG) --name $(CLUSTER_NAME)
 
-# .PHONY: deploy
-# deploy:
-# 	@echo "Deploying application using Helm..."
-# 	helm install $(HELM_RELEASE_NAME) charts/mlops || helm upgrade $(HELM_RELEASE_NAME) charts/mlops
+.PHONY: deploy
+deploy:
+	@echo "Deploying application using Helm..."
+	helm install $(HELM_RELEASE_NAME) helm-charts || helm upgrade $(HELM_RELEASE_NAME) helm-charts
 
-# .PHONY: all-in-one
-# all-in-one: setup deploy
-# 	@echo "Complete setup finished!"
-# 	@echo "Waiting for all services to start..."
-# 	sleep 10
-# 	@make test
-# 	@echo "\nApplication is available at: http://ml-app.localhost:$(HOST_PORT)"
+.PHONY: all-in-one
+all-in-one: setup deploy
+	@echo "Complete setup finished!"
+	@echo "Waiting for all services to start..."
+	sleep 10
+	@make test
+	@echo "\nApplication is available at: http://ml-web-service.localhost:$(HOST_PORT)"
 
 # .PHONY: test
 # test:
@@ -124,10 +124,10 @@ load:
 # 	kubectl get pods,svc,ingress
 # 	@echo "\nWaiting for pods to be ready..."
 # 	kubectl wait --for=condition=ready pod -l app=$(HELM_RELEASE_NAME) --timeout=180s
-# 	@echo "\nTesting health endpoint (http://ml-app.localhost)..."
-# 	curl -s http://ml-app.localhost/
+# 	@echo "\nTesting health endpoint (http://ml-web-service.localhost)..."
+# 	curl -s http://ml-web-service.localhost/
 # 	@echo "\nTesting ML endpoint with test image and saving to k8s-test-output.json..."
-# 	@curl -s -X POST -F "file=@images/test_car.jpg" http://ml-app.localhost/detect > k8s-test-output.json
+# 	@curl -s -X POST -F "file=@images/test_car.jpg" http://ml-web-service.localhost/detect > k8s-test-output.json
 # 	@echo "\nPrediction results saved to k8s-test-output.json"
 # 	@echo "\nContents of k8s-test-output.json:"
 # 	@cat k8s-test-output.json | jq '.' || cat k8s-test-output.json

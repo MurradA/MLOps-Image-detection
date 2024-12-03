@@ -18,6 +18,9 @@ A FastAPI application that uses YOLOv8 model to detect objects in images. The se
 make all-in-one
 
 # Local development setup
+# Remeber to ensure you are using the correct local python3 version to prevent version/dependancy issues
+# Run export PATH="/path/to/python3.13/bin:$PATH"
+
 python3 -m venv venv
 source venv/bin/activate
 ## Install PyTorch CPU version
@@ -26,7 +29,7 @@ pip3 install -r requirements.txt
 python3 app/main.py
 
 curl http://localhost:8000/
-curl -X POST -F "file=@images/test_car.jpg" http://localhost:8000/detect
+curl -X POST -F "file=@murrad-test-image.jpeg" http://localhost:8000/detect > test.json
 ```
 
 ## 🔧 Available Make Commands
