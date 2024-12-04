@@ -6,7 +6,6 @@ import io
 from typing import List, Dict
 
 app = FastAPI(title="ML Web Service")
-# Load the YOLO model at startup
 model = YOLO('yolov8n.pt')
 
 @app.get("/")
@@ -15,19 +14,16 @@ async def root():
 
 @app.post("/detect")
 async def detect_objects(file: UploadFile = File(...)) -> Dict:
-    # Validate file type
     if not file.content_type.startswith('image/'):
         raise HTTPException(status_code=400, detail="File must be an image")
     
     try:
-        # Read image file
+
         contents = await file.read()
         image = Image.open(io.BytesIO(contents))
         
-        # Perform prediction
         results = model(image)
         
-        # Extract predictions
         predictions = []
         for result in results:
             boxes = result.boxes
